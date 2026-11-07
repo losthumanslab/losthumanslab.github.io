@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.losthumanslab.arrowpuzzle",
+      "sha256_cert_fingerprints": [
+        "99:18:97:73:A3:41:2A:28:39:5F:59:70:63:A4:B2:D7:F9:3D:E4:89:EB:2B:BC:D9:26:02:32:84:3B:05:89:11"
+      ]
+    }
+  }
+]

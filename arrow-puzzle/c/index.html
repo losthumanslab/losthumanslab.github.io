@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Arrow Puzzle challenge</title>
+    <meta name="description" content="A friend challenged you in Arrow Puzzle. Open the game to play the same board." />
+    <meta property="og:title" content="You've been challenged in Arrow Puzzle!" />
+    <meta property="og:description" content="Same board, same rules. Can you beat your friend's time?" />
+    <meta property="og:image" content="https://losthumanslab.github.io/arrow-puzzle/feature.png" />
+    <style>
+      :root { --text: #f4f3ff; --muted: #a9abd9; --accent: #ffc845; --card: #242862; --line: #3a3f8c; --green: #3ddc97; --purple: #9d7bff; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: linear-gradient(#1a1d45, #0e1030) fixed; color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      main { max-width: 480px; margin: 0 auto; padding: 48px 16px; text-align: center; }
+      h1 { font-size: 1.8rem; margin: 0 0 6px; }
+      .muted { color: var(--muted); }
+      .code { display: inline-block; margin: 18px 0; padding: 10px 18px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); font-weight: 900; font-size: 1.5rem; letter-spacing: 0.15em; color: var(--accent); }
+      .btn { display: block; margin: 12px 0; padding: 16px; border-radius: 18px; text-decoration: none; font-weight: 900; font-size: 1.15rem; color: #fff; }
+      .open { background: var(--purple); box-shadow: 0 5px 0 #6e52c9; }
+      .get { background: var(--green); color: #0b2a1d; box-shadow: 0 5px 0 #1fa56c; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1 id="title">You've been challenged!</h1>
+      <p class="muted" id="sub">Your friend wants to see if you can beat them in Arrow Puzzle.</p>
+      <div class="code" id="code"></div>
+      <a class="btn open" id="open" href="#">Open in Arrow Puzzle</a>
+      <a class="btn get" id="get" href="https://play.google.com/store/apps/details?id=com.losthumanslab.arrowpuzzle">Get Arrow Puzzle (free)</a>
+      <p class="muted">Already installed? Tap "Open". New here? Install the game, then tap your friend's link again.</p>
+    </main>
+    <script>
+      // Reads ?code= (challenge) or ?room= (1v1 friend room) and forwards to the app.
+      var q = new URLSearchParams(location.search);
+      var room = (q.get('room') || '').replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 6);
+      var code = (q.get('code') || '').replace(/[^A-Za-z0-9-]/g, '').toUpperCase().slice(0, 11);
+      var store = 'https://play.google.com/store/apps/details?id=com.losthumanslab.arrowpuzzle';
+      var kind = room ? 'room' : 'challenge';
+      var value = room || code;
+      document.getElementById('code').textContent = value || '—';
+      if (room) {
+        document.getElementById('title').textContent = 'Race me in Arrow Puzzle!';
+        document.getElementById('sub').textContent = 'Your friend made a 1v1 room. Join with this code:';
+      }
+      var scheme = 'arrowpuzzle://' + kind + '?' + (room ? 'room=' : 'code=') + encodeURIComponent(value);
+      var android = /Android/i.test(navigator.userAgent);
+      // On Android an intent:// link opens the app if installed, otherwise the Play Store
+      var intent = 'intent://' + kind + '?' + (room ? 'room=' : 'code=') + encodeURIComponent(value) +
+        '#Intent;scheme=arrowpuzzle;package=com.losthumanslab.arrowpuzzle;S.browser_fallback_url=' + encodeURIComponent(store) + ';end';
+      var open = document.getElementById('open');
+      open.href = android ? intent : scheme;
+      if (value && android) setTimeout(function () { location.href = intent; }, 250);
+    </script>
+  </body>
+</html>
